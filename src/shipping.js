@@ -17,5 +17,5 @@ export function calculateShipping(orderTotal) {
 
   // WORKSHOP BUG: An order of exactly $50 should receive free shipping.
   // Change this comparison so the test describes the intended behavior.
-  return orderTotal > FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING_COST;
+  return orderTotal >= FREE_SHIPPING_THRESHOLD ? 0 : STANDARD_SHIPPING_COST;
 }
