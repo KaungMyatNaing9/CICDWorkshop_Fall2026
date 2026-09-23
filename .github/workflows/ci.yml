@@ -1,0 +1,80 @@
+name: CI/CD workshop
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+# The workflow only needs to read the repository. It does not deploy to a real service.
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: 1. Lint and test (CI)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Check JavaScript syntax
+        run: npm run lint
+
+      - name: Run automated tests
+        run: npm test
+
+  build:
+    name: 2. Build artifact
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install exact dependencies
+        run: npm ci
+
+      - name: Create deployable artifact
+        run: npm run build
+
+      - name: Save artifact for the delivery step
+        uses: actions/upload-artifact@v4
+        with:
+          name: workshop-build
+          path: dist/
+          if-no-files-found: error
+
+  delivery_demo:
+    name: 3. Delivery demo (main only)
+    needs: build
+    # This represents a deployment gate. A real project would replace the echo
+    # command below with a cloud, Pages, or hosting-provider deployment action.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download the verified build artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: workshop-build
+          path: deploy
+
+      - name: Simulate deployment
+        run: |
+          echo "All checks passed. Deploying this verified artifact..."
+          cat deploy/build-info.txt
+          echo "Deployment simulation complete."

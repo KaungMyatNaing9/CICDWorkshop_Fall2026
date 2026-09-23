@@ -1,0 +1,16 @@
+{
+  "name": "cicd-workshop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A small, intentionally breakable GitHub Actions CI/CD workshop.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "lint": "node --check src/shipping.js && node --check scripts/build.mjs",
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "verify": "npm run lint && npm test && npm run build"
+  }
+}
