@@ -47,7 +47,7 @@ npm run verify
 
 It will stop at the same failing test until you fix the bug.
 
-## Student exercise: make the pipeline pass
+## Make the pipeline pass
 
 1. Open `src/shipping.js`.
 2. Find the line marked `WORKSHOP BUG`.
@@ -70,36 +70,6 @@ It will stop at the same failing test until you fix the bug.
 
 6. On GitHub, open the **Actions** tab and select the `CI/CD workshop` run. Notice that the CI and build jobs are green. On this branch the delivery job is marked as skipped; deployment is reserved for `main`.
 7. Open a pull request, review the green checks, and merge it into `main`. The workflow triggered by the merge runs all three stages. Open the last job to see the deployment simulation and download `workshop-build` from the run summary if you want to inspect the artifact.
-
-## Publish this workshop to GitHub
-
-If this directory is not already connected to a GitHub repository, create a new empty repository on GitHub (do not initialize it with a README), then run the following in this directory. Replace the placeholder with your repository URL.
-
-```bash
-git remote add origin https://github.com/YOUR-USER/YOUR-REPOSITORY.git
-git push -u origin main
-```
-
-The first push intentionally produces a red workflow run. That is the starting point for the student exercise.
-
-If `origin` already exists, inspect it first:
-
-```bash
-git remote -v
-```
-
-Then use its existing URL to push the repository:
-
-```bash
-git push -u origin main
-```
-
-## Teaching prompts
-
-- Why did the build and delivery jobs not run after the test failed?
-- Why is it valuable to test the boundary value ($50), not just values below and above it?
-- Why does the delivery job run only after a push to `main`?
-- What real deployment command or action would replace the simulation in your own project?
 
 ## Project layout
 
